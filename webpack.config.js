@@ -9,7 +9,7 @@ var config = {
   },
   resolve: {
     modulesDirectories: [
-      'node_modules', './static/'
+      'node_modules', 'static'
     ]
   },
   module: {
@@ -41,7 +41,6 @@ var config = {
 }
 
 config.devServer = {
-  // webpack-dev-server -w --progress --devtool eval --port 9090 --quiet --content-base ./webapp/dist
   contentBase: 'dist',
   watch: true,
   progress: true,
