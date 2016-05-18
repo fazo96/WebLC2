@@ -15,11 +15,11 @@ var config = {
   module: {
     loaders: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
         loader: 'babel',
         include: /node_modules\/lc2\.js|static/,
         query: {
-          presets: ['es2015'],
+          presets: ['es2015', 'react'],
           plugins: ['transform-runtime']
         }
       },
@@ -27,7 +27,6 @@ var config = {
       { test: /\.json$/, loader: 'json' }
     ]
   },
-  debug: true,
   devtool: 'inline-source-map',
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),

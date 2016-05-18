@@ -1,0 +1,12 @@
+{
+    "parser": "babel-eslint",
+    "extends": "standard",
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+      "arrow-parens": 0,
+      "no-unused-vars": 0,
+      "jsx-quotes": [ 1, "prefer-double" ]
+    }
+}
