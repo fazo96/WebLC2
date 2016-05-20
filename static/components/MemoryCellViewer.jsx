@@ -8,7 +8,7 @@ class MemoryCellViewer extends React.Component {
   }
 
   render () {
-    return <div class="memory-cell">
+    return <div className="memory-cell">
       <div>
         <b>Address</b> <WordViewer format="hex">{this.props.address}</WordViewer>
       </div>
@@ -19,4 +19,4 @@ class MemoryCellViewer extends React.Component {
   }
 }
 
-export default WordViewer
+export default MemoryCellViewer

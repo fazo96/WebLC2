@@ -8,7 +8,6 @@ class WordViewer extends React.Component {
   }
 
   convert (value, format) {
-    console.log(value)
     if (typeof value === 'string') value = parseInt(value, 10)
     switch (format) {
       case 'hex': return 'x' + this.pad(value.toString(16), 4)
@@ -18,8 +17,8 @@ class WordViewer extends React.Component {
   }
 
   render () {
-    return <span class="word">
-      this.convert(this.props.children || 0, this.props.format || 'hex')
+    return <span className="word">
+      {this.convert(this.props.children || 0, this.props.format || 'hex')}
     </span>
   }
 }

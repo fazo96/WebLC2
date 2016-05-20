@@ -27,7 +27,6 @@ var config = {
       { test: /\.json$/, loader: 'json' }
     ]
   },
-  devtool: 'inline-source-map',
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.DedupePlugin(),
@@ -44,7 +43,7 @@ config.devServer = {
   watch: true,
   progress: true,
   debug: true,
-  devtool: 'eval',
+  devtool: 'inline-source-map',
   port: 9090,
   noInfo: true,
   colors: true,
