@@ -4,7 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {Router, Route, IndexRoute, hashHistory, Link} from 'react-router'
 
-import MemoryViewer from 'components/MemoryViewer.jsx'
+import PagedMemoryViewer from 'components/PagedMemoryViewer.jsx'
 
 class Navbar extends React.Component {
   render () {
@@ -31,7 +31,7 @@ class CPU extends React.Component {
     let LC2 = require('lc2.js').LC2
     let lc2 = new LC2()
     return <div>
-      <MemoryViewer lc2={lc2} start={0} amount={50} />
+      <PagedMemoryViewer lc2={lc2} start={0} />
     </div>
   }
 }
