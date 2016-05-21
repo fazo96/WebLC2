@@ -51,11 +51,15 @@ class PagedMemoryViewer extends React.Component {
     let perPage = this.props.perPage || 20
     let viewer = <MemoryViewer lc2={this.props.lc2} start={start} amount={perPage} />
     return <div className="paged-memory-viewer">
-      <input placeholder="Address (hex)" onChange={this.targetAddrChanged.bind(this)} />
-      <button onClick={this.goto.bind(this)}>Go</button>
-      <button onClick={this.previous.bind(this)}>Previous</button>
-      <button onClick={this.next.bind(this)}>Next</button>
+      <div className="search">
+        <input type="text" placeholder="Address (hex)" onChange={this.targetAddrChanged.bind(this)} />
+        <button onClick={this.goto.bind(this)}>Go</button>
+      </div>
       {viewer}
+      <div className="buttons">
+        <button onClick={this.previous.bind(this)}>Previous</button>
+        <button onClick={this.next.bind(this)}>Next</button>
+      </div>
     </div>
   }
 }

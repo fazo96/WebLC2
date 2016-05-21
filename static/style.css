@@ -17,6 +17,12 @@ section.element.active {
   display: block
 }
 
+.editor {
+  min-height: 5em;
+  border: .12em solid grey;
+  padding: 1em;
+}
+
 navbar {
   display: block;
   width: 100%;
@@ -48,5 +54,34 @@ navbar a.active {
 
 navbar section {
   display: inline-block;
+  margin: 0 .5em;
+}
+
+button {
+  background-color: white;
+  color: black;
+  border: solid .12em grey;
+  border-radius: .5em;
+  padding: .75em;
+  margin: 2em 0;
+  transition: all .25s ease;
+}
+
+button:hover {
+    background-color: #afafaf;
+    color: white;
+    border-color: white;
+}
+
+input[type="text"] {
+    padding: .75em;
+    border: solid .12em grey;
+}
+
+.paged-memory-viewer .search button {
+  margin: 0 1em;
+}
+
+.paged-memory-viewer .buttons button {
   margin: 0 .5em;
 }

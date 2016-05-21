@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom'
 import {Router, Route, IndexRoute, hashHistory, Link} from 'react-router'
 
 import PagedMemoryViewer from 'components/PagedMemoryViewer.jsx'
+import CPU from 'components/CPU.jsx'
+import Editor from 'components/Editor.jsx'
 
 class Navbar extends React.Component {
   render () {
@@ -13,26 +15,6 @@ class Navbar extends React.Component {
       <Link to="/cpu" activeClassName="active">CPU</Link>
       <Link to="/editor" activeClassName="active">Editor</Link>
     </navbar>
-  }
-}
-
-class Editor extends React.Component {
-  render () {
-    return <section className="element editor active">
-      <div className="editor-body" contenteditable>
-        {this.props.children}
-      </div>
-    </section>
-  }
-}
-
-class CPU extends React.Component {
-  render () {
-    let LC2 = require('lc2.js').LC2
-    let lc2 = new LC2()
-    return <div>
-      <PagedMemoryViewer lc2={lc2} start={0} />
-    </div>
   }
 }
 
