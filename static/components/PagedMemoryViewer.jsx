@@ -20,9 +20,17 @@ class PagedMemoryViewer extends React.Component {
     this.setState({ start: this.props.start })
   }
 
+  ensureBounds (val) {
+    let total = Math.pow(2, 16)
+    if (val < 0) val = 0
+    if (val >= total - this.props.perPage) val = total - this.props.perPage
+    return val
+  }
+
   move (offset) {
+    let start
     this.setState({
-      start: this.state.start + (this.props.perPage || 20) * offset
+      start: this.ensureBounds(this.state.start + (this.props.perPage || 20) * offset)
     })
   }
 
@@ -35,10 +43,8 @@ class PagedMemoryViewer extends React.Component {
   }
 
   goto () {
-    let start = parseInt(this.state.targetAddr || 0, 16) - parseInt((this.props.perPage || 21) / 2)
-    if (start < 0) start = 0
-    if (start > Math.pow(2, 16)) start = Math.pow(2, 16) - 1 - this.props.perPage
-    this.setState({ start })
+    let start = parseInt(this.state.targetAddr || 0, 16) - parseInt(this.props.perPage / 2)
+    this.setState({ start: this.ensureBounds(start) })
   }
 
   targetAddrChanged (event) {
@@ -48,8 +54,7 @@ class PagedMemoryViewer extends React.Component {
   render () {
     let start = this.state.start
     let total = Math.pow(2, 16)
-    let perPage = this.props.perPage || 20
-    let viewer = <MemoryViewer lc2={this.props.lc2} start={start} amount={perPage} />
+    let viewer = <MemoryViewer lc2={this.props.lc2} start={start} amount={this.props.perPage} />
     return <div className="paged-memory-viewer">
       <div className="search">
         <input type="text" placeholder="Address (hex)" onChange={this.targetAddrChanged.bind(this)} />

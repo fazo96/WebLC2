@@ -7,7 +7,7 @@ class CPU extends React.Component {
     let LC2 = require('lc2.js').LC2
     let lc2 = new LC2()
     return <div>
-      <PagedMemoryViewer lc2={lc2} start={0} />
+      <PagedMemoryViewer lc2={lc2} start={0} perPage={20} />
     </div>
   }
 }
