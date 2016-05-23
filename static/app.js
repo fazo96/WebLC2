@@ -2,8 +2,9 @@ import 'style.css'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Router, Route, IndexRoute, hashHistory, Link} from 'react-router'
+import {Router, Route, IndexRoute, hashHistory, browserHistory, Link} from 'react-router'
 
+import HTTP from 'components/HTTP.js'
 import PagedMemoryViewer from 'components/PagedMemoryViewer.jsx'
 import CPU from 'components/CPU.jsx'
 import Editor from 'components/Editor.jsx'
@@ -37,7 +38,7 @@ class App extends React.Component {
 
 class AppRouter extends React.Component {
   render () {
-    return <Router history={hashHistory}>
+    return <Router history={history}>
       <Route path="/" component={App}>
         <IndexRoute component={Homepage} />
         <Route path="/editor" component={Editor} />
@@ -47,4 +48,13 @@ class AppRouter extends React.Component {
   }
 }
 
-ReactDOM.render(<AppRouter/>, document.getElementById('react-app'))
+let history
+HTTP.get('/server', response => {
+  if (response.data && response.code === 200) {
+    console.log('WebLC2 server detected. Using BrowserHistory')
+    history = browserHistory
+  } else {
+    history = hashHistory
+  }
+  ReactDOM.render(<AppRouter/>, document.getElementById('react-app'))
+})
