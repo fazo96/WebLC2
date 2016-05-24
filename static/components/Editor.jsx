@@ -30,7 +30,9 @@ class Editor extends React.Component {
       let assembled = assembler.assemble(this.sanitize(this.state.code))
       let compiled = assembler.toBinary(assembled)
       console.log('Compiled:', compiled)
-      DataManager.set('binaries', this.state.name, compiled)
+      let toSave = Array(compiled)
+      console.log('Saving:', toSave)
+      DataManager.set('binaries', this.state.name, toSave)
     }
   }
 

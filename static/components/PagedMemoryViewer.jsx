@@ -1,5 +1,6 @@
 import React from 'react'
 import MemoryCellViewer from './MemoryCellViewer.jsx'
+import DataManager from './DataManager.js'
 
 class MemoryViewer extends React.Component {
   render () {
@@ -17,7 +18,8 @@ class MemoryViewer extends React.Component {
 class PagedMemoryViewer extends React.Component {
 
   componentWillMount () {
-    this.setState({ start: this.props.start })
+    let start = DataManager.load('memory-viewer-location') || this.props.start
+    this.setState({ start })
   }
 
   ensureBounds (val) {
@@ -28,10 +30,9 @@ class PagedMemoryViewer extends React.Component {
   }
 
   move (offset) {
-    let start
-    this.setState({
-      start: this.ensureBounds(this.state.start + (this.props.perPage || 20) * offset)
-    })
+    let start = this.ensureBounds(this.state.start + (this.props.perPage || 20) * offset)
+    DataManager.save('memory-viewer-location', start)
+    this.setState({ start })
   }
 
   next () {
@@ -43,12 +44,17 @@ class PagedMemoryViewer extends React.Component {
   }
 
   goto () {
-    let start = parseInt(this.state.targetAddr || 0, 16) - parseInt(this.props.perPage / 2)
-    this.setState({ start: this.ensureBounds(start) })
+    let start = this.ensureBounds(parseInt(this.state.targetAddr || 0, 16) - parseInt(this.props.perPage / 2))
+    DataManager.save('memory-viewer-location', start)
+    this.setState({ start })
   }
 
   targetAddrChanged (event) {
     this.setState({ targetAddr: event.target.value })
+  }
+
+  locationToHex (loc) {
+    return loc.toString(16)
   }
 
   render () {

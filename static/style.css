@@ -85,3 +85,13 @@ input[type="text"] {
 .paged-memory-viewer .buttons button {
   margin: 0 .5em;
 }
+
+.memory-cell div {
+  display: inline-block;
+  text-align: justify;
+  min-width: 5em;
+}
+
+.memory-cell .memory-value {
+  margin-left: 2em;
+}
