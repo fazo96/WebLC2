@@ -57,13 +57,16 @@ navbar section {
   margin: 0 .5em;
 }
 
-button {
+button, a.button {
   background-color: white;
   color: black;
   border: solid .12em grey;
   border-radius: .5em;
   padding: .75em;
-  margin: 2em 0;
+  margin: .25em;
+  text-decoration: none;
+  font-size: 1em;
+  display: inline-block;
   transition: all .25s ease;
 }
 
@@ -76,10 +79,6 @@ button:hover {
 input[type="text"] {
     padding: .75em;
     border: solid .12em grey;
-}
-
-.paged-memory-viewer .search button {
-  margin: 0 1em;
 }
 
 .paged-memory-viewer .buttons button {

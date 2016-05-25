@@ -11,16 +11,35 @@ class Editor extends React.Component {
       .join('\n')
   }
 
+  load (program) {
+    let programs = DataManager.load('programs') || {}
+    console.log('Programs:', programs)
+    let code = ''
+    let name = program || ''
+    if (programs[name]) {
+      code = programs[name].split('\n').join('<br>')
+    }
+    this.setState({ code, name })
+  }
+
   componentWillMount () {
+    if (this.props.params.name) {
+      this.load(this.props.params.name)
+    } else {
+      let name = DataManager.load('editor-program-name')
+      if (name) this.load(name)
+    }
     let Assembler = require('lc2.js').Assembler
     let assembler = new Assembler()
-    let code = DataManager.load('editor') || ''
-    let name = DataManager.load('editor-program-name') || ''
-    this.setState({ code, name, assembler })
+    this.setState({ assembler })
+  }
+
+  componentWillReceiveProps (props) {
+    if (props.params.name) this.load(props.params.name)
   }
 
   backupCode (event) {
-    DataManager.save('editor', event.target.value)
+    DataManager.set('programs', this.state.name, this.sanitize(event.target.value))
     this.setState({ code: event.target.value })
   }
 

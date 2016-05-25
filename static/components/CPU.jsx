@@ -29,6 +29,7 @@ class CPU extends React.Component {
   run () {
     this.setState({ running: true })
     this.props.route.lc2.run(() => {
+      console.log('done')
       this.setState({ running: false })
     })
   }

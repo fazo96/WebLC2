@@ -47,7 +47,7 @@ class AppRouter extends React.Component {
     return <Router history={history}>
       <Route path="/" component={App}>
         <IndexRoute component={Homepage} />
-        <Route path="/editor" component={Editor} />
+        <Route path="/edit(or)(/:name)" component={Editor} />
         <Route path="/cpu" component={CPU} lc2={this.state.lc2} />
         <Route path="/binaries" component={Binaries} lc2={this.state.lc2} />
         <Route path="/programs" component={Programs} />
