@@ -11,6 +11,8 @@ import Binaries from 'components/Binaries.jsx'
 import Programs from 'components/Programs.jsx'
 import Editor from 'components/Editor.jsx'
 
+import { LC2 } from 'lc2.js'
+
 class Navbar extends React.Component {
   render () {
     return <navbar>
@@ -41,13 +43,17 @@ class App extends React.Component {
 }
 
 class AppRouter extends React.Component {
+  componentWillMount () {
+    this.setState({ lc2: new LC2() })
+  }
+
   render () {
     return <Router history={history}>
       <Route path="/" component={App}>
         <IndexRoute component={Homepage} />
         <Route path="/editor" component={Editor} />
-        <Route path="/cpu" component={CPU} />
-        <Route path="/binaries" component={Binaries} />
+        <Route path="/cpu" component={CPU} lc2={this.state.lc2} />
+        <Route path="/binaries" component={Binaries} lc2={this.state.lc2} />
         <Route path="/programs" component={Programs} />
       </Route>
     </Router>
