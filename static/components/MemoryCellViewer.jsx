@@ -10,10 +10,10 @@ class MemoryCellViewer extends React.Component {
   render () {
     return <div className="memory-cell">
       <div className="memory-address">
-        <b><WordViewer format="hex">{this.props.address}</WordViewer></b>
+        <b><WordViewer format={this.props.format}>{this.props.address}</WordViewer></b>
       </div>
       <div className="memory-value">
-        <WordViewer format="hex">{this.getValue()}</WordViewer>
+        <WordViewer format={this.props.format}>{this.getValue()}</WordViewer>
       </div>
     </div>
   }
