@@ -10,20 +10,9 @@ import CPU from 'components/CPU.jsx'
 import Binaries from 'components/Binaries.jsx'
 import Programs from 'components/Programs.jsx'
 import Editor from 'components/Editor.jsx'
+import Navbar from 'components/Navbar.jsx'
 
 import { LC2 } from 'lc2.js'
-
-class Navbar extends React.Component {
-  render () {
-    return <navbar>
-      <Link to="/" activeClassName="active">WebLC2</Link>
-      <Link to="/cpu" activeClassName="active">CPU</Link>
-      <Link to="/binaries" activeClassName="active">Binaries</Link>
-      <Link to="/editor" activeClassName="active">Editor</Link>
-      <Link to="/programs" activeClassName="active">Programs</Link>
-    </navbar>
-  }
-}
 
 class Homepage extends React.Component {
   render () {
@@ -33,8 +22,15 @@ class Homepage extends React.Component {
 
 class App extends React.Component {
   render () {
+    let nav = [
+      { name: 'WebLC2', url: '/' },
+      { name: 'CPU', url: '/cpu' },
+      { name: 'Binaries', url: '/binaries' },
+      { name: 'Editor', url: '/editor' },
+      { name: 'Programs', url: '/programs' }
+    ]
     return <div>
-      <Navbar />
+      <Navbar links={nav} />
       <div className="container">
         {this.props.children}
       </div>
