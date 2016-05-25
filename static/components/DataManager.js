@@ -23,13 +23,15 @@ let DataManager = {
     if (this.isAvailable()) {
       let obj = this.load(name) || {}
       if (typeof obj !== 'object') obj = {}
-      if (typeof value === 'object') {
-        obj[prop] = JSON.stringify(value)
-      } else {
-        obj[prop] = value
-      }
+      obj[prop] = value
       this.save(name, obj)
     }
+  },
+  convertBinaryToArray (binary) {
+    let arr = []
+    for (let i in binary) arr.push(binary[i])
+    console.log('Arrayfied:', arr)
+    return arr
   },
   isAvailable () {
     return window && window.localStorage

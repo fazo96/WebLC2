@@ -13,7 +13,7 @@ class Editor extends React.Component {
 
   componentWillMount () {
     let Assembler = require('lc2.js').Assembler
-    let assembler = new Assembler(true)
+    let assembler = new Assembler()
     let code = DataManager.load('editor') || ''
     let name = DataManager.load('editor-program-name') || ''
     this.setState({ code, name, assembler })
@@ -30,7 +30,7 @@ class Editor extends React.Component {
       let assembled = assembler.assemble(this.sanitize(this.state.code))
       let compiled = assembler.toBinary(assembled)
       console.log('Compiled:', compiled)
-      let toSave = Array(compiled)
+      let toSave = DataManager.convertBinaryToArray(compiled)
       console.log('Saving:', toSave)
       DataManager.set('binaries', this.state.name, toSave)
     }

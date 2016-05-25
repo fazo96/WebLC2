@@ -19,11 +19,12 @@ class PagedMemoryViewer extends React.Component {
 
   componentWillMount () {
     let start = DataManager.load('memory-viewer-location') || this.props.start
-    this.setState({ start })
+    this.setState({ start: parseInt(start) })
   }
 
   ensureBounds (val) {
     let total = Math.pow(2, 16)
+    val = parseInt(val)
     if (val < 0) val = 0
     if (val >= total - this.props.perPage) val = total - this.props.perPage
     return val
@@ -60,13 +61,12 @@ class PagedMemoryViewer extends React.Component {
   render () {
     let start = this.state.start
     let total = Math.pow(2, 16)
-    let viewer = <MemoryViewer lc2={this.props.lc2} start={start} amount={this.props.perPage} />
     return <div className="paged-memory-viewer">
       <div className="search">
         <input type="text" placeholder="Address (hex)" onChange={this.targetAddrChanged.bind(this)} />
         <button onClick={this.goto.bind(this)}>Go</button>
       </div>
-      {viewer}
+      <MemoryViewer lc2={this.props.lc2} start={start} amount={this.props.perPage} />
       <div className="buttons">
         <button onClick={this.previous.bind(this)}>Previous</button>
         <button onClick={this.next.bind(this)}>Next</button>
