@@ -14,8 +14,9 @@ class CPU extends React.Component {
   }
 
   jump () {
-    if (this.state.jumpTo >= 0 && this.state.jumpTo <= Math.pow(2, 16) - 1) {
-      this.props.route.lc2.pc = this.state.jumpTo
+    let dest = parseInt(this.state.jumpTo, 16)
+    if (dest >= 0 && dest <= Math.pow(2, 16) - 1) {
+      this.props.route.lc2.pc = dest
       this.forceUpdate()
     }
   }
@@ -26,11 +27,23 @@ class CPU extends React.Component {
     })
   }
 
-  run () {
-    this.setState({ running: true })
-    this.props.route.lc2.run(() => {
-      console.log('done')
-      this.setState({ running: false })
+  toggleRun () {
+    if (this.state.running) {
+      this.props.route.lc2.turnOff()
+    } else {
+      this.setState({ running: true })
+      this.props.route.lc2.run(this.onDoneRunning.bind(this), this.onInstructionDone.bind(this))
+    }
+  }
+
+  onDoneRunning (cpuOff) {
+    console.log('Done:', cpuOff)
+    this.setState({ running: !cpuOff })
+  }
+
+  onInstructionDone (cpuOff, done) {
+    this.forceUpdate(() => {
+      done()
     })
   }
 
@@ -40,12 +53,13 @@ class CPU extends React.Component {
 
   render () {
     let lc2 = this.props.route.lc2
-    return <div>
-      <button onClick={this.reset.bind(this)}>Reset</button>
-      <button onClick={this.step.bind(this)}>Step</button>
-      <button onClick={this.run.bind(this)}>Run</button>
-      {this.state.running ? 'Running, please wait...' : ''}
-      <div>
+    return <div className="cpu">
+      <div className="controls">
+        <button onClick={this.reset.bind(this)}>Reset</button>
+        <button onClick={this.step.bind(this)}>Step</button>
+        <button onClick={this.toggleRun.bind(this)}>
+          {this.state.running ? 'Halt' : 'Run' }
+        </button>
         <input type="text" onChange={this.jumpAddrChanged.bind(this)} placeholder="Jump to (hex)..."/>
         <button onClick={this.jump.bind(this)}>Jump</button>
       </div>

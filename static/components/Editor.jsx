@@ -11,13 +11,12 @@ class Editor extends React.Component {
       .join('\n')
   }
 
-  load (program) {
+  load (name) {
     let programs = DataManager.load('programs') || {}
     console.log('Programs:', programs)
     let code = ''
-    let name = program || ''
-    if (programs[name]) {
-      code = programs[name].split('\n').join('<br>')
+    if (programs[name] && programs[name].code) {
+      code = programs[name].code.split('\n').join('<br>')
     }
     this.setState({ code, name })
   }
@@ -25,9 +24,6 @@ class Editor extends React.Component {
   componentWillMount () {
     if (this.props.params.name) {
       this.load(this.props.params.name)
-    } else {
-      let name = DataManager.load('editor-program-name')
-      if (name) this.load(name)
     }
     let Assembler = require('lc2.js').Assembler
     let assembler = new Assembler()
@@ -38,38 +34,35 @@ class Editor extends React.Component {
     if (props.params.name) this.load(props.params.name)
   }
 
-  backupCode (event) {
-    DataManager.set('programs', this.state.name, this.sanitize(event.target.value))
+  codeEdited (event) {
     this.setState({ code: event.target.value })
   }
 
-  assemble () {
+  save () {
+    let code = this.sanitize(this.state.code)
+    let program = DataManager.load('programs')[this.state.name]
+    let binary = program ? program.binary : undefined
     if (this.assembleAvailable()) {
       let assembler = this.state.assembler
       let assembled = assembler.assemble(this.sanitize(this.state.code))
       let compiled = assembler.toBinary(assembled)
       console.log('Compiled:', compiled)
-      let toSave = DataManager.convertBinaryToArray(compiled)
-      console.log('Saving:', toSave)
-      DataManager.set('binaries', this.state.name, toSave)
+      binary = DataManager.convertBinaryToArray(compiled)
     }
+    console.log('Saving:', code, binary)
+    DataManager.set('programs', this.state.name, { code, binary })
   }
 
   assembleAvailable () {
     return this.state.assembler && this.state.name && this.state.name.length > 0
   }
 
-  nameChanged (event) {
-    this.setState({ name: event.target.value })
-    DataManager.save('editor-program-name', event.target.value)
-  }
-
   render () {
     return <div>
-      <input type="text" placeholder="Program name" onChange={this.nameChanged.bind(this)} value={this.state.name}/>
-      <ContentEditable className="editor" onChange={this.backupCode.bind(this)} html={this.state.code}/>
-      <button onClick={this.assemble.bind(this)} disabled={!this.assembleAvailable.apply(this)}>
-        Assemble
+      <b>{this.state.name}</b>
+      <ContentEditable className="editor" onChange={this.codeEdited.bind(this)} html={this.state.code}/>
+      <button onClick={this.save.bind(this)}>
+        Save
       </button>
     </div>
   }

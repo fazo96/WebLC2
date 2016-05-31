@@ -81,8 +81,18 @@ input[type="text"] {
     border: solid .12em grey;
 }
 
+.paged-memory-viewer, .register-viewer {
+  display: inline-block;
+  vertical-align: top;
+  margin: 2em;
+}
+
 .paged-memory-viewer .buttons button {
   margin: 0 .5em;
+}
+
+.memory-cell {
+  display: block
 }
 
 .memory-cell div {
@@ -93,4 +103,14 @@ input[type="text"] {
 
 .memory-cell .memory-value {
   margin-left: 2em;
+}
+
+td {
+  border: .1em solid grey;
+  padding: .5em;
+  min-width: 5em;
+}
+
+thead td {
+  font-weight: bold
 }

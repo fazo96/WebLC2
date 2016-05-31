@@ -7,7 +7,6 @@ import {Router, Route, IndexRoute, hashHistory, browserHistory, Link} from 'reac
 import HTTP from 'components/HTTP.js'
 import PagedMemoryViewer from 'components/PagedMemoryViewer.jsx'
 import CPU from 'components/CPU.jsx'
-import Binaries from 'components/Binaries.jsx'
 import Programs from 'components/Programs.jsx'
 import Editor from 'components/Editor.jsx'
 import Navbar from 'components/Navbar.jsx'
@@ -25,8 +24,6 @@ class App extends React.Component {
     let nav = [
       { name: 'WebLC2', url: '/' },
       { name: 'CPU', url: '/cpu' },
-      { name: 'Binaries', url: '/binaries' },
-      { name: 'Editor', url: '/editor' },
       { name: 'Programs', url: '/programs' }
     ]
     return <div>
@@ -47,10 +44,9 @@ class AppRouter extends React.Component {
     return <Router history={history}>
       <Route path="/" component={App}>
         <IndexRoute component={Homepage} />
-        <Route path="/edit(or)(/:name)" component={Editor} />
+        <Route path="/edit(or)/:name" component={Editor} />
         <Route path="/cpu" component={CPU} lc2={this.state.lc2} />
-        <Route path="/binaries" component={Binaries} lc2={this.state.lc2} />
-        <Route path="/programs" component={Programs} />
+        <Route path="/programs" component={Programs} lc2={this.state.lc2} />
       </Route>
     </Router>
   }

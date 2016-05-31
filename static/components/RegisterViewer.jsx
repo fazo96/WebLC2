@@ -11,7 +11,7 @@ class RegisterViewer extends React.Component {
     for (let i = 0; i < 7; i++) {
       gpr.push(lc2.gpr[i])
     }
-    return <div>
+    return <div className="register-viewer">
       <table>
         <thead>
           <tr><td>Register</td><td>Value</td></tr>
