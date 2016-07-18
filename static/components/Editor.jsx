@@ -6,9 +6,12 @@ class Editor extends React.Component {
 
   sanitize (code) {
     return code
-      .split(/(<\/?(br|div)>)+/)
-      .filter(x => !/(<?\/?(br|div)>?)+/.test(x))
+      .split(/(<\/?(br|div|span)>)+/)
+      .filter(x => !/(<?\/?(br|div|span)>?)+/.test(x))
       .join('\n')
+      .split(/((&nbsp;)|(&emsp;))+/)
+      .filter(x => !/((&nbsp;)|(&emsp;))+/.test(x))
+      .join(' ')
   }
 
   load (name) {
