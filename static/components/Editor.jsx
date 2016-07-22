@@ -24,20 +24,34 @@ class Editor extends React.Component {
   }
 
   componentWillMount () {
-    if (this.props.params.name) {
-      this.load(this.props.params.name)
+    if (this.props.name) {
+      this.load(this.props.name)
     }
     let Assembler = require('lc2.js').Assembler
     let assembler = new Assembler()
     this.setState({ assembler })
   }
 
+  componentWillUnmount () {
+    if (this.props.name) {
+      this.save()
+    }
+  }
+
   componentWillReceiveProps (props) {
-    if (props.params.name) this.load(props.params.name)
+    if (props.name) this.load(props.name)
   }
 
   codeEdited (event) {
-    this.setState({ code: event.target.value })
+    this.setState({ code: event.target.value }, () => {
+      this.save()
+      if (typeof this.props.save === 'function') {
+        this.props.onSave({
+          code: this.state.code,
+          binary: this.state.binary
+        })
+      }
+    })
   }
 
   save () {
@@ -53,6 +67,7 @@ class Editor extends React.Component {
     }
     console.log('Saving:', code, binary)
     DataManager.set('programs', this.state.name, { code, binary })
+    this.setState({ binary })
   }
 
   assembleAvailable () {
@@ -60,7 +75,7 @@ class Editor extends React.Component {
   }
 
   render () {
-    return <div>
+    return <div style={this.props.style}>
       <b>{this.state.name}</b>
       <ContentEditable className="editor" onChange={this.codeEdited.bind(this)} html={this.state.code}/>
       <button onClick={this.save.bind(this)}>

@@ -77,6 +77,16 @@ a.button:hover, button:hover {
     border-color: white;
 }
 
+.tab button {
+  padding: 0 0 0 .5em;
+  border: none;
+  margin: 0;
+}
+
+.tab.active span {
+  text-decoration: underline;
+}
+
 input[type="text"] {
     padding: .5em;
     border: solid .12em grey;

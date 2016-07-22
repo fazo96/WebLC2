@@ -2,45 +2,48 @@ import React from 'react'
 import PagedMemoryViewer from 'components/PagedMemoryViewer.jsx'
 import RegisterViewer from 'components/RegisterViewer.jsx'
 import Console from 'components/Console.jsx'
+import { LC2 } from 'lc2.js'
+import Editor from 'components/Editor.jsx'
 
 class CPU extends React.Component {
 
   componentWillMount () {
     this.setState({
-      running: this.props.route.lc2.isOn()
+      lc2: new LC2(),
+      running: false
     })
   }
 
   componentWillUnmount () {
-    this.props.route.lc2.turnOff()
+    this.state.lc2.turnOff()
     this.setState({ running: false })
   }
 
   reset () {
-    this.props.route.lc2.reset(true)
+    this.state.lc2.reset(true)
     this.forceUpdate()
   }
 
   jump () {
     let dest = parseInt(this.state.jumpTo, 16)
     if (dest >= 0 && dest <= Math.pow(2, 16) - 1) {
-      this.props.route.lc2.pc = dest
+      this.state.lc2.pc = dest
       this.forceUpdate()
     }
   }
 
   step () {
-    this.props.route.lc2.step(() => {
+    this.state.lc2.step(() => {
       this.forceUpdate()
     })
   }
 
   toggleRun () {
     if (this.state.running) {
-      this.props.route.lc2.turnOff()
+      this.state.lc2.turnOff()
     } else {
       this.setState({ running: true }, () => {
-        this.props.route.lc2.run(null, this.onInstructionDone.bind(this))
+        this.state.lc2.run(null, this.onInstructionDone.bind(this))
       })
     }
   }
@@ -57,9 +60,19 @@ class CPU extends React.Component {
     this.setState({ jumpTo: event.target.value })
   }
 
+  onEditorChanged (data) {
+    if (data.binary) {
+      this.state.lc2.turnOff()
+      this.state.lc2.reset(true)
+      this.props.lc2.loadProgram(data.binary)
+      this.forceUpdate()
+    }
+  }
+
   render () {
-    let lc2 = this.props.route.lc2
-    return <div className="cpu">
+    let lc2 = this.state.lc2
+    return <div className="cpu" style={this.props.style}>
+      <Editor name={this.props.name} onSave={this.onEditorChanged.bind(this)}/>
       <div className="controls">
         <button onClick={this.reset.bind(this)}>Reset</button>
         <button onClick={this.step.bind(this)}>Step</button>
