@@ -16,7 +16,6 @@ class Editor extends React.Component {
 
   load (name) {
     let programs = DataManager.load('programs') || {}
-    console.log('Programs:', programs)
     let code = ''
     if (programs[name] && programs[name].code) {
       code = programs[name].code.split('\n').join('<br>')

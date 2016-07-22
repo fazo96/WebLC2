@@ -1,15 +1,23 @@
 import React from 'react'
 import PagedMemoryViewer from 'components/PagedMemoryViewer.jsx'
 import RegisterViewer from 'components/RegisterViewer.jsx'
+import Console from 'components/Console.jsx'
 
 class CPU extends React.Component {
 
   componentWillMount () {
+    this.setState({
+      running: this.props.route.lc2.isOn()
+    })
+  }
+
+  componentWillUnmount () {
+    this.props.route.lc2.turnOff()
     this.setState({ running: false })
   }
 
   reset () {
-    this.props.route.lc2.reset()
+    this.props.route.lc2.reset(true)
     this.forceUpdate()
   }
 
@@ -31,20 +39,18 @@ class CPU extends React.Component {
     if (this.state.running) {
       this.props.route.lc2.turnOff()
     } else {
-      this.setState({ running: true })
-      this.props.route.lc2.run(this.onDoneRunning.bind(this), this.onInstructionDone.bind(this))
+      this.setState({ running: true }, () => {
+        this.props.route.lc2.run(null, this.onInstructionDone.bind(this))
+      })
     }
   }
 
-  onDoneRunning (cpuOff) {
-    console.log('Done:', cpuOff)
-    this.setState({ running: !cpuOff })
-  }
-
   onInstructionDone (cpuOff, done) {
-    this.forceUpdate(() => {
-      done()
-    })
+    if (this.state.running) {
+      this.setState({ running: !cpuOff }, () => {
+        this.forceUpdate(() => done())
+      })
+    }
   }
 
   jumpAddrChanged (event) {
@@ -65,6 +71,7 @@ class CPU extends React.Component {
       </div>
       <RegisterViewer lc2={lc2} />
       <PagedMemoryViewer lc2={lc2} start={0} perPage={20} />
+      <Console lc2={lc2} />
     </div>
   }
 }

@@ -29,7 +29,7 @@
     "css-loader": "^0.23.1",
     "diet": "^0.10.7",
     "diet-static": "^2.2.0",
-    "lc2.js": "^1.2.4",
+    "lc2.js": "^1.2.5",
     "react": "^15.0.2",
     "react-dom": "^15.0.2",
     "react-router": "^2.4.1",

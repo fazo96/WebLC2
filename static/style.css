@@ -58,11 +58,12 @@ navbar section {
 }
 
 button, a.button {
+  cursor: default;
   background-color: white;
   color: black;
   border: solid .12em grey;
   border-radius: .5em;
-  padding: .75em;
+  padding: .25em 1em;
   margin: .25em;
   text-decoration: none;
   font-size: 1em;
@@ -70,14 +71,14 @@ button, a.button {
   transition: all .25s ease;
 }
 
-button:hover {
+a.button:hover, button:hover {
     background-color: #afafaf;
     color: white;
     border-color: white;
 }
 
 input[type="text"] {
-    padding: .75em;
+    padding: .5em;
     border: solid .12em grey;
 }
 
@@ -113,4 +114,46 @@ td {
 
 thead td {
   font-weight: bold
+}
+
+.console-toolbar {
+  display: block;
+  border-bottom: solid .1em grey;
+  border-top: solid .1em grey;
+  overflow: auto;
+}
+
+.console-toolbar > .buttons {
+  clear: both;
+  float: right;
+}
+
+.console-toolbar > .text {
+  display: inline-block;
+  padding: .5em;
+  clear: both;
+}
+
+.console-empty {
+  color: grey;
+}
+
+.console-content {
+  padding: .5em;
+}
+
+.program {
+  height: 3em;
+}
+
+.program .title{
+  margin-top: 1em;
+}
+
+.program div {
+  display: inline-block;
+}
+
+.program .buttons {
+  float: right;
 }

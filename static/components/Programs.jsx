@@ -16,10 +16,14 @@ class Program extends React.Component {
     let lines = this.props.program.code ? this.props.program.code.split('\n').length : '?'
     let size = this.props.program.binary ? this.props.program.binary.length * 2 : '?'
     return <div className="program">
-      <b>{this.props.name}</b> ({lines} lines) ({size} bytes)
-      {this.props.program.code ? <Link className="button" to={'/editor/' + this.props.name}>Edit</Link> : <span/>}
-      {this.props.program.binary ? <button onClick={this.load.bind(this)}>Load</button> : <span/>}
-      {this.props.onDelete ? <button onClick={() => this.delete(this.props.name)}>Delete</button> : <span/>}
+      <div className="title">
+        <b>{this.props.name}</b> ({lines} lines) ({size} bytes)
+      </div>
+      <div className="buttons">
+        {this.props.program.code ? <Link className="button" to={'/editor/' + this.props.name}>Edit</Link> : <span/>}
+        {this.props.program.binary ? <button onClick={this.load.bind(this)}>Load</button> : <span/>}
+        {this.props.onDelete ? <button onClick={() => this.delete(this.props.name)}>Delete</button> : <span/>}
+      </div>
     </div>
   }
 }
