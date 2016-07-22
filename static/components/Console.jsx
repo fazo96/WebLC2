@@ -41,6 +41,13 @@ class Console extends React.Component {
     }
   }
 
+  inputKey (event) {
+    console.log(event.keyCode, event.charCode, event.key)
+    let lc2 = this.props.lc2
+    let lc2console = lc2.peripherals[parseInt('FF16', 16)]
+    lc2console.input(event.key)
+  }
+
   render () {
     return <div className="console">
       <div className="console-toolbar">
@@ -49,7 +56,7 @@ class Console extends React.Component {
           <button onClick={this.clear.bind(this)}>Clear</button>
         </div>
       </div>
-      <div className="console-content">
+      <div className="console-content" tabIndex="0" onKeyPress={this.inputKey.bind(this)}>
         {this.getContent()}
       </div>
     </div>
