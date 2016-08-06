@@ -2,25 +2,66 @@ import React from 'react'
 import PagedMemoryViewer from 'components/PagedMemoryViewer.jsx'
 import RegisterViewer from 'components/RegisterViewer.jsx'
 import Console from 'components/Console.jsx'
-import { LC2 } from 'lc2.js'
+import { LC2, Assembler } from 'lc2.js'
 import Editor from 'components/Editor.jsx'
+import DataManager from './DataManager.js'
 
 class CPU extends React.Component {
 
   componentWillMount () {
+    let programs = DataManager.load('programs') || {}
+    let name = this.props.name
+    let code = ''
+    if (programs[name] && programs[name].code) {
+      code = programs[name].code.split('\n').join('<br>')
+    }
     this.setState({
       lc2: new LC2(),
-      running: false
-    })
+      running: false,
+      code
+    }, () => this.reset())
   }
 
   componentWillUnmount () {
     this.state.lc2.turnOff()
     this.setState({ running: false })
+    this.save(this.sanitize(this.state.code), this.compile())
+  }
+
+  sanitize (code) {
+    return code
+      .split(/(<\/?(br|div|span)>)+/)
+      .filter(x => !/(<?\/?(br|div|span)>?)+/.test(x))
+      .join('\n')
+      .split(/((&nbsp;)|(&emsp;))+/)
+      .filter(x => !/((&nbsp;)|(&emsp;))+/.test(x))
+      .join(' ')
+  }
+
+  compile () {
+    let code = this.sanitize(this.state.code)
+    let program = DataManager.load('programs')[this.props.name]
+    let binary = program ? program.binary : undefined
+    let assembler = new Assembler()
+    let assembled = assembler.assemble(this.sanitize(this.state.code))
+    let compiled = assembler.toBinary(assembled)
+    console.log('Compiled:', compiled)
+    binary = DataManager.convertBinaryToArray(compiled)
+    this.save(code, binary)
+    return binary
+  }
+
+  save (code = this.state.code, binary = this.state.binary) {
+    console.log('Saving:', code, binary)
+    DataManager.set('programs', this.props.name, { code, binary })
   }
 
   reset () {
     this.state.lc2.reset(true)
+    let binary = this.compile(this.state.code)
+    if (typeof binary === 'object' && binary.length > 0) {
+      this.state.lc2.loadProgram(binary)
+    }
     this.forceUpdate()
   }
 
@@ -60,21 +101,17 @@ class CPU extends React.Component {
     this.setState({ jumpTo: event.target.value })
   }
 
-  onEditorChanged (data) {
-    if (data.binary) {
-      this.state.lc2.turnOff()
-      this.state.lc2.reset(true)
-      this.props.lc2.loadProgram(data.binary)
-      this.forceUpdate()
-    }
+  onEditorChanged (code) {
+    this.setState({ code })
   }
 
   render () {
+    let resetButtonString = this.state.code.length > 0 ? 'Reload' : 'Reset'
     let lc2 = this.state.lc2
     return <div className="cpu" style={this.props.style}>
       <Editor name={this.props.name} onSave={this.onEditorChanged.bind(this)}/>
       <div className="controls">
-        <button onClick={this.reset.bind(this)}>Reset</button>
+        <button onClick={this.reset.bind(this)}>{resetButtonString}</button>
         <button onClick={this.step.bind(this)}>Step</button>
         <button onClick={this.toggleRun.bind(this)}>
           {this.state.running ? 'Halt' : 'Run' }

@@ -9,7 +9,7 @@ class MemoryViewer extends React.Component {
     for (let i = this.props.start; i < end; i++) addresses.push(i)
     return <div className="memory">
       {addresses.map(address =>
-        <MemoryCellViewer lc2={this.props.lc2} format="hex" address={address} key={address} />
+        <MemoryCellViewer lc2={this.props.lc2} formats={['hex', 'bin']} address={address} key={address} />
       )}
     </div>
   }
@@ -18,7 +18,7 @@ class MemoryViewer extends React.Component {
 class PagedMemoryViewer extends React.Component {
 
   componentWillMount () {
-    let start = DataManager.load('memory-viewer-location') || this.props.start
+    let start = this.props.start
     this.setState({ start: parseInt(start) })
   }
 
@@ -32,7 +32,6 @@ class PagedMemoryViewer extends React.Component {
 
   move (offset) {
     let start = this.ensureBounds(this.state.start + (this.props.perPage || 20) * offset)
-    DataManager.save('memory-viewer-location', start)
     this.setState({ start })
   }
 

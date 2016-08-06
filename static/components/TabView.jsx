@@ -49,7 +49,11 @@ class Tab extends React.Component {
   }
 
   stopRenaming () {
-    this.setState({ renaming: false })
+    this.setState({ renaming: false }, () => {
+      if (typeof this.props.onNameChanged === 'function') {
+        this.props.onNameChanged(this.state.name, this.props.i)
+      }
+    })
   }
 
   inputKeyUp (e) {
@@ -69,7 +73,7 @@ class Tab extends React.Component {
     } else {
       let active = this.props.activeTab
       let style = {
-        'text-decoration': active ? 'underline' : 'none'
+        'textDecoration': active ? 'underline' : 'none'
       }
       return <span onClick={this.startRenaming.bind(this)} style={style}>
         {this.state.name}
@@ -130,11 +134,19 @@ class TabView extends React.Component {
     this.setState({ tabs, active })
   }
 
+  onTabNameChanged (tabName, tabIndex) {
+    let tabs = this.state.tabs
+    tabs[tabIndex].name = tabName
+    this.setState({ tabs })
+  }
+
   buildTab (tab, i) {
     return <Tab
       name={tab.name || 'Unnamed Tab'} key={i} i={i} closeable={!!tab.closeable}
+      renameable={!!tab.renameable}
       activeTab={i === this.state.active}
       selectTab={this.selectTab.bind(this)} closeTab={this.closeTab.bind(this)}
+      onNameChanged={this.onTabNameChanged.bind(this)}
     />
   }
 
@@ -148,7 +160,7 @@ class TabView extends React.Component {
     />
   }
 
-  createNewTab (name, view, closeable = true, renameable = false) {
+  createNewTab (name, view, closeable = true, renameable = true) {
     this.setState({
       tabs: this.state.tabs.concat({ name, view, closeable, renameable })
     })

@@ -1,6 +1,5 @@
 import React from 'react'
 import DataManager from './DataManager.js'
-import Link from 'react-router/lib/Link'
 import CPU from 'components/CPU.jsx'
 
 class Program extends React.Component {
@@ -48,6 +47,10 @@ class Programs extends React.Component {
     this.setState({ newProgramName: event.target.value })
   }
 
+  newProgram () {
+    this.props.createNewTab(this.state.newProgramName, CPU)
+  }
+
   render () {
     return <div className="programs" style={this.props.style}>
       {Object.keys(this.state.programs).map(program =>
@@ -58,7 +61,7 @@ class Programs extends React.Component {
         />
       )}
       <input type="text" placeholder="Create new program..." onChange={this.newProgramNameChanged.bind(this)}/>
-      <Link className="button" to={'/editor/' + this.state.newProgramName} disabled={!this.state.newProgramName}>Edit</Link>
+      <button onClick={this.newProgram.bind(this)} disabled={!this.state.newProgramName}>Edit</button>
     </div>
   }
 }

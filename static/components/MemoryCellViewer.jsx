@@ -8,13 +8,16 @@ class MemoryCellViewer extends React.Component {
   }
 
   render () {
+    let formats = this.props.format ? [ this.props.format ] : this.props.formats
     return <div className="memory-cell">
       <div className="memory-address">
-        <b><WordViewer format={this.props.format}>{this.props.address}</WordViewer></b>
+        <b><WordViewer format="hex">{this.props.address}</WordViewer></b>
       </div>
-      <div className="memory-value">
-        <WordViewer format={this.props.format}>{this.getValue()}</WordViewer>
-      </div>
+      {formats.map((format, key) => {
+        return <div className="memory-value" key={key} >
+          <WordViewer format={format}>{this.getValue()}</WordViewer>
+        </div>
+      })}
     </div>
   }
 }
