@@ -167,3 +167,8 @@ thead td {
 .program .buttons {
   float: right;
 }
+/*
+.CodeMirror-line span {
+  padding-left: 3em;
+}
+*/

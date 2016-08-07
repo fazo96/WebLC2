@@ -13,46 +13,32 @@ class CPU extends React.Component {
     let name = this.props.name
     let code = ''
     if (programs[name] && programs[name].code) {
-      code = programs[name].code.split('\n').join('<br>')
+      code = programs[name].code
     }
     this.setState({
       lc2: new LC2(),
       running: false,
       code
-    }, () => this.reset())
+    })
   }
 
   componentWillUnmount () {
     this.state.lc2.turnOff()
     this.setState({ running: false })
-    this.save(this.sanitize(this.state.code), this.compile())
+    // this.save(this.state.code)
   }
 
-  sanitize (code) {
-    return code
-      .split(/(<\/?(br|div|span)>)+/)
-      .filter(x => !/(<?\/?(br|div|span)>?)+/.test(x))
-      .join('\n')
-      .split(/((&nbsp;)|(&emsp;))+/)
-      .filter(x => !/((&nbsp;)|(&emsp;))+/.test(x))
-      .join(' ')
-  }
-
-  compile () {
-    let code = this.sanitize(this.state.code)
-    let program = DataManager.load('programs')[this.props.name]
-    let binary = program ? program.binary : undefined
+  compile (code = this.state.code) {
     let assembler = new Assembler()
-    let assembled = assembler.assemble(this.sanitize(this.state.code))
+    let assembled = assembler.assemble(this.state.code)
     let compiled = assembler.toBinary(assembled)
-    console.log('Compiled:', compiled)
-    binary = DataManager.convertBinaryToArray(compiled)
-    this.save(code, binary)
+    let binary = DataManager.convertBinaryToArray(compiled)
     return binary
   }
 
-  save (code = this.state.code, binary = this.state.binary) {
-    console.log('Saving:', code, binary)
+  save (code = this.state.code) {
+    let binary = this.compile(code)
+    console.log('save', code, binary)
     DataManager.set('programs', this.props.name, { code, binary })
   }
 
@@ -102,6 +88,7 @@ class CPU extends React.Component {
   }
 
   onEditorChanged (code) {
+    console.log('onEditorChanged:', code)
     this.setState({ code })
   }
 
@@ -109,8 +96,9 @@ class CPU extends React.Component {
     let resetButtonString = this.state.code.length > 0 ? 'Reload' : 'Reset'
     let lc2 = this.state.lc2
     return <div className="cpu" style={this.props.style}>
-      <Editor name={this.props.name} onSave={this.onEditorChanged.bind(this)}/>
+      <Editor name={this.props.name} onSave={this.onEditorChanged.bind(this)} onReady={this.reset.bind(this)}/>
       <div className="controls">
+        <button onClick={() => this.save()}>Save</button>
         <button onClick={this.reset.bind(this)}>{resetButtonString}</button>
         <button onClick={this.step.bind(this)}>Step</button>
         <button onClick={this.toggleRun.bind(this)}>

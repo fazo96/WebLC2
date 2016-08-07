@@ -24,7 +24,8 @@ var config = {
         }
       },
       { test: /\.css$/, loaders: ['style', 'css'] },
-      { test: /\.json$/, loader: 'json' }
+      { test: /\.json$/, loader: 'json' },
+      { test: /\.md$/, loaders: ['html', 'markdown'] }
     ]
   }
 }

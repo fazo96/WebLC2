@@ -6,7 +6,10 @@ import Editor from './Editor.jsx'
 
 class Homepage extends React.Component {
   render () {
-    return <h1 style={this.props.style}>Hello World</h1>
+    return <div
+      style={this.props.style}
+      dangerouslySetInnerHTML={{ __html: require('../pages/homepage.md') }}
+    />
   }
 }
 
@@ -153,16 +156,20 @@ class TabView extends React.Component {
   getTabContent (tab, i) {
     let Component = tab.view
     let hidden = i !== this.state.active
-    return <Component
+    let component = <Component
       key={i} name={tab.name}
       createNewTab={this.createNewTab.bind(this)}
       style={hidden ? { display: 'none' } : {}}
     />
+    return component
   }
 
   createNewTab (name, view, closeable = true, renameable = true) {
     this.setState({
       tabs: this.state.tabs.concat({ name, view, closeable, renameable })
+    }, () => {
+      let newTabIndex = this.state.tabs.length - 1
+      this.selectTab(newTabIndex)
     })
   }
 

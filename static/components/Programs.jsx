@@ -30,16 +30,14 @@ class Program extends React.Component {
 class Programs extends React.Component {
 
   componentWillMount () {
-    let programs = DataManager.load('programs') || {}
-    this.setState({ programs })
+    this.setState({ newProgramName: '' })
   }
 
   delete (name) {
-    let programs = this.state.programs
+    let programs = DataManager.load('programs') || {}
     if (programs[name] !== undefined) {
       delete programs[name]
       DataManager.save('programs', programs)
-      this.setState({ programs })
     }
   }
 
@@ -49,18 +47,22 @@ class Programs extends React.Component {
 
   newProgram () {
     this.props.createNewTab(this.state.newProgramName, CPU)
+    this.setState({ newProgramName: '' }, () => {
+      this.forceUpdate()
+    })
   }
 
   render () {
+    let programs = DataManager.load('programs') || {}
     return <div className="programs" style={this.props.style}>
-      {Object.keys(this.state.programs).map(program =>
+      {Object.keys(programs).map(program =>
         <Program key={program} name={program}
-          program={this.state.programs[program]}
+          program={programs[program]}
           onDelete={this.delete.bind(this)}
           createNewTab={this.props.createNewTab}
         />
       )}
-      <input type="text" placeholder="Create new program..." onChange={this.newProgramNameChanged.bind(this)}/>
+      <input type="text" placeholder="Create new program..." onChange={this.newProgramNameChanged.bind(this)} value={this.state.newProgramName}/>
       <button onClick={this.newProgram.bind(this)} disabled={!this.state.newProgramName}>Edit</button>
     </div>
   }
