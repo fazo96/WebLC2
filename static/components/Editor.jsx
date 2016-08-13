@@ -4,7 +4,7 @@ import ContentEditable from './ContentEditable.jsx'
 import DataManager from './DataManager.js'
 import CodeMirror from 'codemirror'
 import LC2Mode from '../lib/lc2CodemirrorMode.js'
-require('../../node_modules/codemirror/lib/codemirror.css')
+// require('../../node_modules/codemirror/lib/codemirror.css')
 require('../../node_modules/codemirror/addon/mode/simple.js')
 
 CodeMirror.defineSimpleMode('lc2', LC2Mode)
