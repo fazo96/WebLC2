@@ -1,5 +1,4 @@
 import React from 'react'
-import Navbar from './Navbar.jsx'
 import CPU from './CPU.jsx'
 import Programs from './Programs.jsx'
 import Editor from './Editor.jsx'
