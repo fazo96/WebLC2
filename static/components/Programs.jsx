@@ -46,7 +46,10 @@ class LocalPrograms extends React.Component {
   componentWillMount () {
     this.setState({
       programs: DataManager.load('programs') || {},
-      newProgramName: ''
+      newProgramName: '',
+      allowUpload: false
+    }, () => {
+      this.checkServer()
     })
   }
 
@@ -71,6 +74,20 @@ class LocalPrograms extends React.Component {
     }
   }
 
+  checkServer () {
+    HTTP.get('/programs', response => {
+      let allowUpload = response.code === 200
+      this.setState({ allowUpload })
+    })
+  }
+
+  upload (name, program) {
+    program.name = name
+    HTTP.post('/programs', program, response => {
+      console.log(response)
+    })
+  }
+
   render () {
     let programs = DataManager.load('programs') || {}
     return <div>
@@ -80,6 +97,8 @@ class LocalPrograms extends React.Component {
         programs={programs}
         delete={this.delete.bind(this)}
         newProgram={this.newProgram.bind(this)}
+        allowUpload={this.state.allowUpload}
+        upload={this.upload.bind(this)}
       />
       <input type="text" placeholder="Create new program..." onChange={this.newProgramNameChanged.bind(this)} value={this.state.newProgramName}/>
       <button onClick={this.newProgram.bind(this)} disabled={!this.state.newProgramName}>Edit</button>
@@ -102,14 +121,6 @@ class RemotePrograms extends React.Component {
     })
   }
 
-  upload (name, program) {
-    program.name = name
-    HTTP.post('/programs', program, response => {
-      console.log(response)
-      this.refresh()
-    })
-  }
-
   componentWillMount () {
     this.setState({})
     this.refresh()
@@ -124,9 +135,8 @@ class RemotePrograms extends React.Component {
           style={this.props.style}
           programs={programs}
           delete={this.delete}
-          allowUpload={true}
-          upload={this.upload.bind(this)}
         />
+        <button onClick={this.refresh.bind(this)}>Refresh</button>
       </div>
     } else if (this.state.error) {
       return <div>
