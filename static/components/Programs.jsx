@@ -58,7 +58,7 @@ class LocalPrograms extends React.Component {
   }
 
   newProgram (name) {
-    if (name === undefined) {
+    if (typeof name !== 'string') {
       this.props.createNewTab(this.state.newProgramName, CPU)
       this.setState({ newProgramName: '' })
     } else {
