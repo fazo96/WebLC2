@@ -10,10 +10,10 @@ WebLC2 is a modern, static, in browser __IDE__ for the __LC-2 Computer__.
 - assembling and executing those programs
 - viewing the virtual LC-2 memory
 - step by step program execution
+- sharing programs with other users
 
 What's missing:
 
-- sharing programs with other users
 - viewing assembler errors and warnings
 - advanced step by step execution
 - advanced memory visualization
@@ -25,7 +25,7 @@ This project was built by [Enrico Fasoli](https://github.com/fazo96)
 
 Other important contributors:
 
-- [Federico Dossena](https://github.com/adolfintel) helped with the UI design
+- [Federico Dossena](https://github.com/adolfintel) advised the current UI layout
 - [Giulio Ginesi](https://github.com/blazef104) helped with debugging the emulator and the assembler
 
 ### License

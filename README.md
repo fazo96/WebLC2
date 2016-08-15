@@ -2,7 +2,7 @@
 
 A Web based LC-2 programming environment.
 
-It doesn't yet do anything...
+[Try it!](https://fazo96.github.io/WebLC2)
 
 ### Developing
 
