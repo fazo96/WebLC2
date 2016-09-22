@@ -41,9 +41,17 @@ MongoClient.connect(url, function (err, db) {
   let programs = db.collection('programs')
 
   app.post('/program', $ => {
+    console.log($.body)
     programs.insert($.body, (err, result) => {
       if (err) $.failure('db', err)
       else $.success()
+    })
+  })
+
+  app.get('/programs', $ => {
+    programs.find({}).toArray((err, result) => {
+      if (err) $.failure('db', err)
+      else $.json(result)
     })
   })
 })

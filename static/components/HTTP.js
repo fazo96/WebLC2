@@ -35,7 +35,8 @@ let HTTP = {
         })
       }
     }
-    req.send(data)
+    console.log('POST', JSON.stringify(data))
+    req.send(JSON.stringify(data))
     return req
   }
 }

@@ -12,14 +12,17 @@ class Program extends React.Component {
   render () {
     let lines = this.props.program.code ? this.props.program.code.split('\n').length : '?'
     let size = this.props.program.binary ? this.props.program.binary.length * 2 : '?'
+    let name = this.props.program.name || this.props.name || 'Unnamed'
     return <div className="program" style={this.props.style}>
       <div className="title">
-        <b>{this.props.name}</b> ({lines} lines) ({size} bytes)
+        <b>{name}</b> ({lines} lines) ({size} bytes)
       </div>
       <div className="buttons">
-        {this.props.allowUpload ? <button onClick={() => this.props.upload(this.props.name, this.props.program)}>Upload</button> : <span/>}
-        {this.props.open ? <button onClick={() => this.props.open(this.props.name)}>Open</button> : <span/>}
-        {this.props.onDelete ? <button onClick={() => this.delete(this.props.name)}>Delete</button> : <span/>}
+        {this.props.allowUpload ? <button onClick={() => this.props.upload(name, this.props.program)}>Upload</button> : <span/>}
+        {this.props.open ? <button onClick={() => this.props.open(name)}>Open</button> : <span/>}
+        {this.props.onDelete ? <button onClick={() => this.delete(name)}>Delete</button> : <span/>}
+        {this.props.upload ? <button onClick={() => this.props.upload(name, this.props.program)}>Upload</button> : <span/>}
+        {this.props.download ? <button onClick={() => this.props.download(this.props.program)}>Copy Locally</button> : <span/>}
       </div>
     </div>
   }
@@ -33,8 +36,10 @@ class ProgramsView extends React.Component {
       {Object.keys(programs).map(program =>
         <Program key={program} name={program}
           program={programs[program]}
-          onDelete={this.props.delete ? this.props.delete.bind(this) : () => {}}
+          onDelete={this.props.delete ? this.props.delete.bind(this) : undefined}
           open={this.props.newProgram}
+          upload={this.props.allowUpload ? this.props.upload : undefined}
+          download={this.props.download}
         />
       )}
     </div>
@@ -71,6 +76,7 @@ class LocalPrograms extends React.Component {
     if (programs[name] !== undefined) {
       delete programs[name]
       DataManager.save('programs', programs)
+      this.refresh()
     }
   }
 
@@ -83,8 +89,15 @@ class LocalPrograms extends React.Component {
 
   upload (name, program) {
     program.name = name
-    HTTP.post('/programs', program, response => {
+    console.log('POST', program)
+    HTTP.post('/program', program, response => {
       console.log(response)
+    })
+  }
+
+  refresh () {
+    this.setState({
+      programs: DataManager.load('programs') || {}
     })
   }
 
@@ -100,8 +113,11 @@ class LocalPrograms extends React.Component {
         allowUpload={this.state.allowUpload}
         upload={this.upload.bind(this)}
       />
-      <input type="text" placeholder="Create new program..." onChange={this.newProgramNameChanged.bind(this)} value={this.state.newProgramName}/>
-      <button onClick={this.newProgram.bind(this)} disabled={!this.state.newProgramName}>Edit</button>
+      <button onClick={this.refresh.bind(this)}>Refresh</button>
+      <div className="new-program-form">
+        <input type="text" placeholder="Create new program..." onChange={this.newProgramNameChanged.bind(this)} value={this.state.newProgramName}/>
+        <button onClick={this.newProgram.bind(this)} disabled={!this.state.newProgramName}>Edit</button>
+      </div>
     </div>
   }
 }
@@ -126,6 +142,12 @@ class RemotePrograms extends React.Component {
     this.refresh()
   }
 
+  download (program) {
+    let programs = DataManager.load('programs') || {}
+    programs[program.name] = program
+    DataManager.save('programs', programs)
+  }
+
   render () {
     if (this.state.programs) {
       let programs = this.state.programs
@@ -135,6 +157,7 @@ class RemotePrograms extends React.Component {
           style={this.props.style}
           programs={programs}
           delete={this.delete}
+          download={this.download}
         />
         <button onClick={this.refresh.bind(this)}>Refresh</button>
       </div>

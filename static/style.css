@@ -152,6 +152,10 @@ thead td {
   padding: .5em;
 }
 
+.new-program-form {
+  margin-top: 1em;
+}
+
 .program {
   height: 3em;
 }
